@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sun.awt.image.ImageWatched;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 @RestController
 public class userController {
@@ -38,57 +40,33 @@ public class userController {
     //algorithm
     @Test
     public void algorithm(){
-        int[] a={-1,2,0};
-        int k=1;
-        int v=findKthLargest(a,k);
+        int[] a={-1,0,1,2,-1,-4};
+        List<List<Integer>> v=threeSum(a);
         return ;
     }
-    public int findKthLargest(int[] list , int k){
-        int tmp=list[0];
-        int i=0,j=list.length-1;
-        while(i<j){
-            for(;i<j && list[j]>=tmp;j--);
-            list[i]=list[j];
-            if(i>=j)break;
-            for(;i<j && list[i]<=tmp;i++);
-            list[j]=list[i];
+    public List<List<Integer>> threeSum(int[] nums) {
+        List value=new LinkedList();
+        List list=new LinkedList();
+        for( int x: nums){
+            list.add(x);
         }
-        int index=i;
-        list[index]=tmp;
-        int right=list.length-1-index;
-        if(right>=k){
-            int[] l=new int[right];
-            System.arraycopy(list,index+1,l,0,right);
-            return findKthLargest(l,k);
-        }else if(right+1==k){
-            return tmp;
-        }else{
-            return findKthLargest(java.util.Arrays.copyOf(list,index),k-(right+1));
-        }
-    }
-    public void db(int begin,int end,char[] cs) {
-        if(begin==end){
-            list.add(new String(cs));
-            return ;
-        }
-        Set set=new HashSet();
-        for(int i=begin;i<=end;i++){
-            if(set.contains(cs[i])){
-                continue;
+        Collections.sort(list);
+        Object[] os=list.toArray();
+        Set s1=new HashSet();
+        for(int i=0;i<os.length-2;i++){
+            for(int j=i+1;j<os.length-1;j++){
+                for(int z=j+1;z<os.length;z++){
+                    if((int)os[i]+(int)os[j]+(int)os[z]==0){
+                        List t1=new LinkedList();
+                        t1.add((int)os[i]);
+                        t1.add((int)os[j]);
+                        t1.add((int)os[z]);
+                        value.add(t1);
+                    }
+                }
             }
-            set.add(cs[i]);
-            char c=cs[i];
-            cs[i]=cs[begin];
-            cs[begin]=c;
-            db(begin+1,end,cs);
-            c=cs[i];
-            cs[i]=cs[begin];
-            cs[begin]=c;
         }
+        return value;
     }
-
-
-
-
 
 }
