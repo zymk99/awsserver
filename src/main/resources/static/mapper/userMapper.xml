@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.awsserver.mapper.userMapper" >
+    <select id="userLogin" parameterType="string" resultType="com.example.awsserver.dao.userDao">
+        select * from usertable where name=#{name} and passwd=#{passwd} and isvalid is null  limit 1
+    </select>
+</mapper>
