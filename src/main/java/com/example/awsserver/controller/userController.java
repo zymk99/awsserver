@@ -54,8 +54,22 @@ public class userController {
         Object[] os=list.toArray();
         Set s1=new HashSet();
         for(int i=0;i<os.length-2;i++){
+            if(s1.contains(os[i])){
+                continue;
+            }
+            s1.add(os[i]);
+            Set s2=new HashSet();
             for(int j=i+1;j<os.length-1;j++){
+                if(s2.contains(os[j])){
+                    continue;
+                }
+                s2.add(os[j]);
+                Set s3=new HashSet();
                 for(int z=j+1;z<os.length;z++){
+                    if(s3.contains(os[z])){
+                        continue;
+                    }
+                    s3.add(os[z]);
                     if((int)os[i]+(int)os[j]+(int)os[z]==0){
                         List t1=new LinkedList();
                         t1.add((int)os[i]);
