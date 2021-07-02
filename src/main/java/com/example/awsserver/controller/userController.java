@@ -4,6 +4,7 @@ import com.example.awsserver.dao.userDao;
 import com.example.awsserver.mapper.userMapper;
 import com.example.awsserver.tool.CommonUtils;
 import com.example.awsserver.tool.JWTUtil;
+import com.example.awsserver.websocket.MyWebSocketClient;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sun.awt.image.ImageWatched;
 
 import java.awt.*;
+import java.net.URI;
 import java.util.*;
 import java.util.List;
 
@@ -39,10 +41,8 @@ public class userController {
     LinkedList<String> list=new LinkedList<String>();
     //algorithm
     @Test
-    public void algorithm(){
-        int[] a={3,-2,1,0};
-        List<List<Integer>> v=threeSum(a);
-        return ;
+    public void algorithm() throws Exception{
+        String url = "ws://10.238.103.122:9998/webSocket/link";
     }
     public List<List<Integer>> threeSum(int[] nums) {
         List value=new LinkedList();
