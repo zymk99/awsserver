@@ -15,7 +15,7 @@ public class MyWebSocketClient {
     public static WebSocketClient client;
     public static void main(String[] args)  throws Exception{
         try {
-            client = new WebSocketClient(new URI("ws://localhost:14621"),new Draft_6455()) {
+            client = new WebSocketClient(new URI("ws://localhost:14621/Notify/"),new Draft_6455()) {
                 @Override
                 public void onOpen(ServerHandshake serverHandshake) {
                     logger.info("握手成功");
