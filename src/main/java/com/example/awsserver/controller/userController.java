@@ -40,7 +40,7 @@ public class userController {
     //algorithm
     @Test
     public void algorithm(){
-        int[] a={-1,0,1,2,-1,-4};
+        int[] a={3,-2,1,0};
         List<List<Integer>> v=threeSum(a);
         return ;
     }
@@ -52,31 +52,31 @@ public class userController {
         }
         Collections.sort(list);
         Object[] os=list.toArray();
-        Set s1=new HashSet();
-        for(int i=0;i<os.length-2;i++){
-            if(s1.contains(os[i])){
+        int lastI= 0,lastJ=0,lastZ=0;
+        if(os.length>0){
+            lastI=(int)os[0]-1;
+        }
+        for(int i=0;i<os.length-2 && (int)os[i]<=0;i++){
+            if((int)os[i]==lastI){
                 continue;
             }
-            s1.add(os[i]);
-            Set s2=new HashSet();
-            for(int j=i+1;j<os.length-1;j++){
-                if(s2.contains(os[j])){
+            lastI=(int)os[i];
+            lastJ=lastI-1;
+            int z=os.length-1;
+            for(int j=i+1;j<os.length-1 && j<z;j++){
+                if((int)os[j]==lastJ){
                     continue;
                 }
-                s2.add(os[j]);
-                Set s3=new HashSet();
-                for(int z=j+1;z<os.length;z++){
-                    if(s3.contains(os[z])){
-                        continue;
-                    }
-                    s3.add(os[z]);
-                    if((int)os[i]+(int)os[j]+(int)os[z]==0){
-                        List t1=new LinkedList();
-                        t1.add((int)os[i]);
-                        t1.add((int)os[j]);
-                        t1.add((int)os[z]);
-                        value.add(t1);
-                    }
+                lastJ=(int)os[j];
+                while(z>j+1 && (int)os[i]+(int)os[j]+(int)os[z]>0){
+                    z--;
+                }
+                if((int)os[i]+(int)os[j]+(int)os[z]==0){
+                    List t1=new LinkedList();
+                    t1.add((int)os[i]);
+                    t1.add((int)os[j]);
+                    t1.add((int)os[z]);
+                    value.add(t1);
                 }
             }
         }
