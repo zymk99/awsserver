@@ -43,29 +43,22 @@ public class userController {
     @Test
     public void algorithm() throws Exception{
         String url = "ws://10.238.103.122:9998/webSocket/link";
-        int[] aa={1,4,3,2,56,6,7,3};
-        int[] asa=MySort(aa);
+        int[] aa={2160,1936,3,29,27,5,2503,1593,2,0,16,0,3860,28908,6,2,15,49,6246,1946,23,105,7996,196,0,2,55,457,5,3,924,7268,16,48,4,0,12,116,2628,1468};
+        int asa=countPairs(aa);
         int x=10;
     }
-    public int[] MySort (int[] arr){
-        db(arr,0,arr.length-1);
-        return arr;
-    }
-    void db(int[] arr,int begin,int end){
-        if(begin>=end){
-            return;
+    public int countPairs(int[] deliciousness) {
+        int c=0,max=1000000007;
+        for(int i=0;i<deliciousness.length-1;i++){
+            for(int j=i+1;j<deliciousness.length;j++){
+                int x=deliciousness[i]+deliciousness[j];
+                if( x>0 && ( x & (x-1) )== 0 ){
+                    c=(c+1)%1000000007;
+                }
+            }
         }
-        int tmp=arr[begin];
-        int _b=begin,_e=end;
-        while(begin<end){
-            for(;begin<end&& arr[end]>=tmp;end--);
-            arr[begin]=arr[end];
-            for(;begin<end && arr[begin]<=tmp;begin++);
-            arr[end]=arr[begin];
-        }
-        arr[begin]=tmp;
-        db(arr,_b,begin-1);
-        db(arr,begin+1,_e);
+        return c;
     }
+
 
 }
