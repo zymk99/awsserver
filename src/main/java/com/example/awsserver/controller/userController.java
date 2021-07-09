@@ -43,21 +43,59 @@ public class userController {
     @Test
     public void algorithm() throws Exception{
         String url = "ws://10.238.103.122:9998/webSocket/link";
-        int[] aa={2160,1936,3,29,27,5,2503,1593,2,0,16,0,3860,28908,6,2,15,49,6246,1946,23,105,7996,196,0,2,55,457,5,3,924,7268,16,48,4,0,12,116,2628,1468};
-        int asa=countPairs(aa);
+        int[][] aa={{3,4},{4,5},{3,2},{5,1},{1,3},{4,2}};
+        int[] asa=gardenNoAdj(5,aa);
         int x=10;
     }
-    public int countPairs(int[] deliciousness) {
-        int c=0,max=1000000007;
-        for(int i=0;i<deliciousness.length-1;i++){
-            for(int j=i+1;j<deliciousness.length;j++){
-                int x=deliciousness[i]+deliciousness[j];
-                if( x>0 && ( x & (x-1) )== 0 ){
-                    c=(c+1)%1000000007;
+    int[] val=null;
+    public int[] gardenNoAdj(int n, int[][] paths) {
+        val=new int[n];
+        int[][] map=new int[n][3];
+        for(int i=0;i<paths.length;i++) {
+            int min=paths[i][0] >paths[i][1]? paths[i][1]-1:paths[i][0]-1;
+            int max=paths[i][0] >paths[i][1]? paths[i][0]-1:paths[i][1]-1;
+            int[] curr=map[min];
+            for(int c=0;c<3;c++){
+                if(curr[c]==0){
+                    map[min][c]=max+1;
+                    break;
+                }
+            }
+            curr=map[max];
+            for(int c=0;c<3;c++){
+                if(curr[c]==0){
+                    map[max][c]=min+1;
+                    break;
                 }
             }
         }
-        return c;
+        for(int index=0;index<map.length;index++){
+            int[] list=map[index];
+            int all[]={1,2,3,4};
+            if(val[ index ]!=0){
+                all[val[index]-1]=0;
+            }
+            for(int i=0;i<list.length;i++){
+                if(list[i]==0)break;
+                if(val[list[i]-1]!=0){
+                    all[ val[list[i]-1]-1 ]=0;
+                }
+            }
+            int i=0;
+            for(;i<list.length;i++){
+                if(list[i]==0)break;
+                if(val[list[i]-1]==0){
+                    int cc=0;
+                    while (all[cc]==0)cc++;
+                    val[list[i]-1]=all[cc];
+                    all[cc]=0;
+                }
+            }
+            if(i==0){
+                val[index]=1;
+            }
+        }
+        return val;
     }
 
 
