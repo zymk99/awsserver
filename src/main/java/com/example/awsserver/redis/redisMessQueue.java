@@ -37,10 +37,11 @@ public class redisMessQueue {
     }
     @Test
     public void pop(){
-        List<byte[]> s = connection.bRPop(300,key.getBytes());
+        List<byte[]> s = connection.bRPop(30,key.getBytes());
         if(CollectionUtils.isEmpty(s)){
             return ;
         }
+        String value=new String(s.get(1));
         int xx=10;
     }
 
