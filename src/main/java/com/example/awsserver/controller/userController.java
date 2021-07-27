@@ -5,6 +5,7 @@ import com.example.awsserver.mapper.userMapper;
 import com.example.awsserver.tool.CommonUtils;
 import com.example.awsserver.tool.JWTUtil;
 import com.example.awsserver.websocket.MyWebSocketClient;
+import com.fasterxml.jackson.core.util.InternCache;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,60 +43,69 @@ public class userController {
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        String url = "ws://10.238.103.122:9998/webSocket/link";
-        int[][] aa={{3,4},{4,5},{3,2},{5,1},{1,3},{4,2}};
-        int[] asa=gardenNoAdj(5,aa);
-        int x=10;
+        int[] target = {391381350,272779990,14679827,772485354,331478688,673799788,328776406,135016059,894557868,559131299} ;
+        int[] arr = {559131299,338063085,559131299,338063085,135016059,793174916,14679827,14679827,894557868,526921048};
+        int x=minOperations(target,arr);
+        int aa=10;
     }
-    int[] val=null;
-    public int[] gardenNoAdj(int n, int[][] paths) {
-        val=new int[n];
-        int[][] map=new int[n][3];
-        for(int i=0;i<paths.length;i++) {
-            int min=paths[i][0] >paths[i][1]? paths[i][1]-1:paths[i][0]-1;
-            int max=paths[i][0] >paths[i][1]? paths[i][0]-1:paths[i][1]-1;
-            int[] curr=map[min];
-            for(int c=0;c<3;c++){
-                if(curr[c]==0){
-                    map[min][c]=max+1;
-                    break;
+
+    public int minOperations(int[] target, int[] arr) {
+        int max=0;
+        for(int x:target){
+            if(x>max)max=x;
+        }
+        int leng=0;
+        if(max<100000){
+            int[] map=new int[max+1];
+            for(int i=0;i<target.length;i++) {
+                map[target[i]] = i + 1;
+            }
+            for(int i=0;i<arr.length;i++){
+                if(max<arr[i] || map[arr[i]]==0){
+                    arr[i]=0;
+                }else{
+                    leng++;
+                    arr[i]=map[arr[i]];
                 }
             }
-            curr=map[max];
-            for(int c=0;c<3;c++){
-                if(curr[c]==0){
-                    map[max][c]=min+1;
-                    break;
+        }else{
+            Map m=new HashMap<Integer, Integer>();
+            for(int i=0;i<target.length;i++){
+                m.put(target[i],i+1);
+            }
+            for(int i=0;i<arr.length;i++){
+                if(m.get(arr[i])==null){
+                    arr[i]=0;
+                }else{
+                    leng++;
+                    arr[i]=(int)m.get(arr[i]);
                 }
             }
         }
-        for(int index=0;index<map.length;index++){
-            int[] list=map[index];
-            int all[]={1,2,3,4};
-            if(val[ index ]!=0){
-                all[val[index]-1]=0;
-            }
-            for(int i=0;i<list.length;i++){
-                if(list[i]==0)break;
-                if(val[list[i]-1]!=0){
-                    all[ val[list[i]-1]-1 ]=0;
-                }
-            }
-            int i=0;
-            for(;i<list.length;i++){
-                if(list[i]==0)break;
-                if(val[list[i]-1]==0){
-                    int cc=0;
-                    while (all[cc]==0)cc++;
-                    val[list[i]-1]=all[cc];
-                    all[cc]=0;
-                }
-            }
-            if(i==0){
-                val[index]=1;
+        int[] tmp=new int[leng];
+        int c=0;
+        for(int x:arr){
+            if(x!=0){
+                tmp[c++]=x;
             }
         }
-        return val;
+        int b=bp(tmp);
+        return target.length-b;
+    }
+    public int bp(int[] list){
+        int[] bp=new int[list.length];
+        int M=0;
+        for(int i=0;i<list.length;i++){
+            int max=0;
+            for(int j=0;j<i;j++){
+                if(list[j]<list[i] && bp[j]>max){
+                    max=bp[j];
+                }
+            }
+            bp[i]=max+1;
+            M= M<bp[i] ? bp[i] : M;
+        }
+        return M;
     }
 
 
