@@ -43,70 +43,24 @@ public class userController {
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        int[] target = {391381350,272779990,14679827,772485354,331478688,673799788,328776406,135016059,894557868,559131299} ;
-        int[] arr = {559131299,338063085,559131299,338063085,135016059,793174916,14679827,14679827,894557868,526921048};
-        int x=minOperations(target,arr);
+        int x=longestCommonSubsequence("mhunuzqrkzsnidwbun","szulspmhwpazoxijwbq");
         int aa=10;
     }
 
-    public int minOperations(int[] target, int[] arr) {
-        int max=0;
-        for(int x:target){
-            if(x>max)max=x;
-        }
-        int leng=0;
-        if(max<100000){
-            int[] map=new int[max+1];
-            for(int i=0;i<target.length;i++) {
-                map[target[i]] = i + 1;
-            }
-            for(int i=0;i<arr.length;i++){
-                if(max<arr[i] || map[arr[i]]==0){
-                    arr[i]=0;
+    public int longestCommonSubsequence(String text1, String text2) {
+        char[] c1=text1.toCharArray(),c2=text2.toCharArray();
+        int x=text1.length(),y=text2.length();
+        int[][] map=new int[x+1][y+1];
+        for(int i=1;i<=x;i++){
+            for(int j=1;j<=y;j++){
+                if(c1[i-1]==c2[j-1]){
+                    map[i][j]=map[i-1][j-1]+1;
                 }else{
-                    leng++;
-                    arr[i]=map[arr[i]];
-                }
-            }
-        }else{
-            Map m=new HashMap<Integer, Integer>();
-            for(int i=0;i<target.length;i++){
-                m.put(target[i],i+1);
-            }
-            for(int i=0;i<arr.length;i++){
-                if(m.get(arr[i])==null){
-                    arr[i]=0;
-                }else{
-                    leng++;
-                    arr[i]=(int)m.get(arr[i]);
+                    map[i][j]=Math.max(map[i-1][j],map[i][j-1]);
                 }
             }
         }
-        int[] tmp=new int[leng];
-        int c=0;
-        for(int x:arr){
-            if(x!=0){
-                tmp[c++]=x;
-            }
-        }
-        int b=bp(tmp);
-        return target.length-b;
+        return map[x][y];
     }
-    public int bp(int[] list){
-        int[] bp=new int[list.length];
-        int M=0;
-        for(int i=0;i<list.length;i++){
-            int max=0;
-            for(int j=0;j<i;j++){
-                if(list[j]<list[i] && bp[j]>max){
-                    max=bp[j];
-                }
-            }
-            bp[i]=max+1;
-            M= M<bp[i] ? bp[i] : M;
-        }
-        return M;
-    }
-
 
 }
