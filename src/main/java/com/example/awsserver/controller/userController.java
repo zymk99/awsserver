@@ -25,6 +25,7 @@ import java.awt.*;
 import java.net.URI;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.Future;
 
 @RestController
 @RunWith(SpringRunner.class)
@@ -51,50 +52,70 @@ public class userController {
     @Scheduled(fixedRate = 5000)
     @Test
     @PostMapping("/user/test")
-    public void aaa() throws InterruptedException {
-        for(int i=0;i<5;i++){
-            a.asy();
-        }
+    public void aaa() throws Exception {
+        Future<Map> f=a.retuAsy();
+        Map M=(Map)f.get();
+        Future<Map> f2=a.retuAsy();
+        Map M2=(Map)f2.get();
+        int aaa=10;
     }
 
     LinkedList<String> list=new LinkedList<String>();
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        int[][] x={{1,2},{2,3},{5},{0},{5},{},{}};
-        List<Integer> aa=eventualSafeNodes(x);
+        int[] x={100,100,100,-250,-60,-140,-50,-50,100,150};
+        int aa=magicTower(x);
         int aas=10;
     }
 
-    int[] map;
-    public List<Integer> eventualSafeNodes(int[][] graph) {
-        List v=new LinkedList<Integer>();
-        map=new int[graph.length];
-        for(int i=0;i<graph.length;i++){
-            db(graph,i);
+    public int magicTower(int[] nums) {
+        int sum[] =new int[nums.length];
+        sum[0]=nums[0];
+        for(int i=1;i<nums.length;i++){
+            sum[i]=sum[i-1]+nums[i];
         }
-        for(int i=0;i<map.length;i++){
-            if(map[i]==2){
-                v.add(i);
-            }
+        if(sum[sum.length-1]<0){
+            return -1;
         }
-        return v;
+        return 0;
     }
 
-    boolean db(int[][] list,int index){
-        if(map[index]==1){
-            return false;
-        }else if(map[index]==2){
-            return true;
-        }
-        map[index]=1;
-        for(int x:list[index]){
-            if(!db(list,x)){
-                return false;
+    int last=-1;
+    int num=0;
+    int minNum=99999;
+    public int magicTower2(int[] nums) {
+        for(int i=nums.length-1;i>=0;i--){
+            if(nums[i]>=0){
+                last=i;
+                break;
             }
         }
-        map[index]=2;
-        return true;
+        if(last==-1)return -1;
+        db(nums,0,0,0);
+        if(minNum==99999){
+            minNum=-1;
+        }
+        return minNum;
+    }
+
+    void db(int[] list,int index,int next,int sum){         //next 负数和
+        if(sum<0 || (index>last && next+sum<0) ){
+            return;
+        }
+        if(index==list.length-1){
+            sum+=list[index];
+            if(sum+next>=0 && num<=minNum){
+                minNum=num;
+            }
+            return;
+        }
+        db(list,index+1,next,sum+list[index]);
+        if(list[index]<0){
+            num+=1;
+            db(list,index+1,next+list[index],sum);
+            num-=1;
+        }
     }
 
     //快排
