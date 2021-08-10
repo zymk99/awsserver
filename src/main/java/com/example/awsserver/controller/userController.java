@@ -28,8 +28,8 @@ import java.util.List;
 import java.util.concurrent.Future;
 
 @RestController
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = AwsserverApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(classes = AwsserverApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class userController {
     @Autowired
     private userMapper userm;
@@ -64,59 +64,38 @@ public class userController {
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        int[] x={100,100,100,-250,-60,-140,-50,-50,100,150};
-        int aa=magicTower(x);
+        int[] x={1};
+        int aa=numberOfArithmeticSlices(x);
         int aas=10;
     }
 
-    public int magicTower(int[] nums) {
-        int sum[] =new int[nums.length];
-        sum[0]=nums[0];
-        for(int i=1;i<nums.length;i++){
-            sum[i]=sum[i-1]+nums[i];
+    public int numberOfArithmeticSlices(int[] nums) {
+        if(nums.length<3){
+            return 0;
         }
-        if(sum[sum.length-1]<0){
-            return -1;
-        }
-        return 0;
-    }
-
-    int last=-1;
-    int num=0;
-    int minNum=99999;
-    public int magicTower2(int[] nums) {
-        for(int i=nums.length-1;i>=0;i--){
-            if(nums[i]>=0){
-                last=i;
-                break;
+        //int[] sub=new int[nums.length-1];
+        int lastd=99999,num=0,c=0;
+        for(int i=0;i<nums.length;i++){
+            int d=0;
+            if(i==nums.length-1){
+                d=lastd-1;
+            }else{
+                d=nums[i+1]-nums[i];
+            }
+            if(d!=lastd){
+                if(c>0){
+                    num+=( (1+c)/2.0 * c );
+                }
+                c=0;
+                lastd=d;
+            }else{
+                c++;
             }
         }
-        if(last==-1)return -1;
-        db(nums,0,0,0);
-        if(minNum==99999){
-            minNum=-1;
-        }
-        return minNum;
+
+        return num;
     }
 
-    void db(int[] list,int index,int next,int sum){         //next 负数和
-        if(sum<0 || (index>last && next+sum<0) ){
-            return;
-        }
-        if(index==list.length-1){
-            sum+=list[index];
-            if(sum+next>=0 && num<=minNum){
-                minNum=num;
-            }
-            return;
-        }
-        db(list,index+1,next,sum+list[index]);
-        if(list[index]<0){
-            num+=1;
-            db(list,index+1,next+list[index],sum);
-            num-=1;
-        }
-    }
 
     //快排
     void mysort(int[] nums,int a,int b){
