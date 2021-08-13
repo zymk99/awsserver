@@ -65,35 +65,41 @@ public class userController {
     @Test
     public void algorithm() throws Exception{
         int[] x={1};
-        int aa=numberOfArithmeticSlices(x);
+        String aa=decodeString("2[abc]3[cd]ef");
         int aas=10;
     }
 
-    public int numberOfArithmeticSlices(int[] nums) {
-        if(nums.length<3){
-            return 0;
-        }
-        //int[] sub=new int[nums.length-1];
-        int lastd=99999,num=0,c=0;
-        for(int i=0;i<nums.length;i++){
-            int d=0;
-            if(i==nums.length-1){
-                d=lastd-1;
-            }else{
-                d=nums[i+1]-nums[i];
-            }
-            if(d!=lastd){
-                if(c>0){
-                    num+=( (1+c)/2.0 * c );
+    public String decodeString(String s) {
+        String val="";
+        while(s.indexOf('[')>=0){
+            char[] cs=s.toCharArray();
+            for(int i=0;i<cs.length;i++){
+                if(cs[i]>='0' && cs[i]<='9'){
+                    val+=s.substring(0,i);
+                    int n=Integer.parseInt( s.substring(i,s.indexOf('[')) );
+                    String ss=null;
+                    if(s.indexOf('[',2)>0 && s.indexOf('[',2)<s.indexOf(']')){
+                        int num=1,begin=s.indexOf('[');
+                        while(num!=0){
+                            begin++;
+                            if(cs[begin]=='[')num++;
+                            if(cs[begin]==']')num--;
+                        }
+                        ss=decodeString(s.substring(s.indexOf('[')+1,begin));
+                        s=s.substring(begin+1,s.length());
+                    }else{
+                        ss=s.substring(s.indexOf('[')+1,s.indexOf(']'));
+                        s=s.substring(s.indexOf(']')+1,s.length());
+                    }
+                    for(int c=0;c<n;c++){
+                        val+=ss;
+                    }
+                    break;
                 }
-                c=0;
-                lastd=d;
-            }else{
-                c++;
             }
         }
-
-        return num;
+        val+=s;
+        return val;
     }
 
 
