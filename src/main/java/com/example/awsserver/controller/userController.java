@@ -64,45 +64,71 @@ public class userController {
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        int[] x={1};
-        String aa=decodeString("2[abc]3[cd]ef");
+        int[][] x={{20,24},{3,17},{17,20},{8,15},{14,17},{6,17},{15,23},{6,8},{15,19},{16,22},{7,9},{8,22},{2,4},{4,11},{22,25},{6,24},{13,19},{15,18},{1,9},{4,9},{4,19},{5,10},{4,21},{4,12},{5,6}};
+        int[] aa=findRedundantConnection(x);
         int aas=10;
     }
 
-    public String decodeString(String s) {
-        String val="";
-        while(s.indexOf('[')>=0){
-            char[] cs=s.toCharArray();
-            for(int i=0;i<cs.length;i++){
-                if(cs[i]>='0' && cs[i]<='9'){
-                    val+=s.substring(0,i);
-                    int n=Integer.parseInt( s.substring(i,s.indexOf('[')) );
-                    String ss=null;
-                    if(s.indexOf('[',2)>0 && s.indexOf('[',2)<s.indexOf(']')){
-                        int num=1,begin=s.indexOf('[');
-                        while(num!=0){
-                            begin++;
-                            if(cs[begin]=='[')num++;
-                            if(cs[begin]==']')num--;
-                        }
-                        ss=decodeString(s.substring(s.indexOf('[')+1,begin));
-                        s=s.substring(begin+1,s.length());
-                    }else{
-                        ss=s.substring(s.indexOf('[')+1,s.indexOf(']'));
-                        s=s.substring(s.indexOf(']')+1,s.length());
+    public int[] findRedundantConnection(int[][] edges) {
+        int max=0;
+        for(int[] t:edges){
+            max=Math.max( max,Math.max(t[0],t[1]) );
+        }
+        MAX=max;
+        flag=new int[max];
+        int[][] map=new int[max][max];
+        for(int[] t:edges){
+            map[t[0]-1][t[1]-1]=1;
+            map[t[1]-1][t[0]-1]=1;
+        }
+        //找到环形
+        int i=0;
+        for(;i<max;i++){
+            int c=0;
+            for(int j=0;j<i;j++){
+                if(map[j][i]==1)c++;
+            }
+            if(c>=2){
+                break;
+            }
+        }
+        db(map,i,i);
+        for(int j=edges.length-1;j>=0;j--){
+            if(set.contains(edges[j][0]) && set.contains(edges[j][1]) )
+            {
+                return edges[j];
+            }
+        }
+        return null;
+    }
+    Set set=new HashSet();
+    int[] flag=null;
+    int MAX=0;
+    int flagnum=0;
+    boolean F=false;
+    boolean db(int[][] map,int poi,int last){
+        if(flag[poi]==1){
+            flagnum=poi;
+            F=true;
+            return true;
+        }else{
+            flag[poi]=1;
+        }
+        for(int i=0;i<MAX;i++){
+            if(i!=last && map[i][poi]==1){
+                if( db(map,i,poi) ){
+                    if(F){
+                        set.add(i+1);
                     }
-                    for(int c=0;c<n;c++){
-                        val+=ss;
+                    if(poi==flagnum){
+                        F=false;
                     }
-                    break;
+                    return true;
                 }
             }
         }
-        val+=s;
-        return val;
+        return false;
     }
-
-
     //快排
     void mysort(int[] nums,int a,int b){
         if(a>=b)return;
