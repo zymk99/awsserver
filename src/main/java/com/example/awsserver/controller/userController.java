@@ -64,71 +64,37 @@ public class userController {
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        int[][] x={{20,24},{3,17},{17,20},{8,15},{14,17},{6,17},{15,23},{6,8},{15,19},{16,22},{7,9},{8,22},{2,4},{4,11},{22,25},{6,24},{13,19},{15,18},{1,9},{4,9},{4,19},{5,10},{4,21},{4,12},{5,6}};
-        int[] aa=findRedundantConnection(x);
+        String x="9,#,#,1";
+        boolean aa=isValidSerialization(x);
         int aas=10;
     }
 
-    public int[] findRedundantConnection(int[][] edges) {
-        int max=0;
-        for(int[] t:edges){
-            max=Math.max( max,Math.max(t[0],t[1]) );
-        }
-        MAX=max;
-        flag=new int[max];
-        int[][] map=new int[max][max];
-        for(int[] t:edges){
-            map[t[0]-1][t[1]-1]=1;
-            map[t[1]-1][t[0]-1]=1;
-        }
-        //找到环形
-        int i=0;
-        for(;i<max;i++){
-            int c=0;
-            for(int j=0;j<i;j++){
-                if(map[j][i]==1)c++;
-            }
-            if(c>=2){
-                break;
-            }
-        }
-        db(map,i,i);
-        for(int j=edges.length-1;j>=0;j--){
-            if(set.contains(edges[j][0]) && set.contains(edges[j][1]) )
-            {
-                return edges[j];
-            }
-        }
-        return null;
-    }
-    Set set=new HashSet();
-    int[] flag=null;
-    int MAX=0;
-    int flagnum=0;
-    boolean F=false;
-    boolean db(int[][] map,int poi,int last){
-        if(flag[poi]==1){
-            flagnum=poi;
-            F=true;
-            return true;
-        }else{
-            flag[poi]=1;
-        }
-        for(int i=0;i<MAX;i++){
-            if(i!=last && map[i][poi]==1){
-                if( db(map,i,poi) ){
-                    if(F){
-                        set.add(i+1);
-                    }
-                    if(poi==flagnum){
-                        F=false;
-                    }
-                    return true;
-                }
+    String[] ss=null;
+    public boolean isValidSerialization(String preorder) {
+        ss=preorder.split(",");
+        if(db()){
+            if(index==ss.length-1){
+                return true;
             }
         }
         return false;
     }
+    int index=0;
+    public boolean db(){
+        if(index>=ss.length){
+            return false;
+        }else if(ss[index].equals("#")){
+            return true;
+        }
+        index++;
+        if( db() )
+        {
+            index++;
+            return db();
+        }
+        return false;
+    }
+
     //快排
     void mysort(int[] nums,int a,int b){
         if(a>=b)return;
