@@ -64,11 +64,9 @@ public class userController {
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        String x="9,#,#,1";
-        boolean aa=isValidSerialization(x);
+        int[] x={2,234,231,1,23,576,8,9,23,8,45,23,32,3,4,5,1,7,2,4};
         int aas=10;
     }
-
     String[] ss=null;
     public boolean isValidSerialization(String preorder) {
         ss=preorder.split(",");
