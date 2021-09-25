@@ -7,6 +7,7 @@ import com.example.awsserver.tool.CommonUtils;
 import com.example.awsserver.tool.JWTUtil;
 import com.example.awsserver.websocket.MyWebSocketClient;
 import com.fasterxml.jackson.core.util.InternCache;
+import lombok.Data;
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +27,9 @@ import java.net.URI;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.Future;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toCollection;
 
 @RestController
 //@RunWith(SpringRunner.class)
@@ -60,12 +64,47 @@ public class userController {
         int aaa=10;
     }
 
+    @Data
+    class cla{
+        private int a;
+        private int b;
+        public cla(int x,int y){
+            a=x;
+            b=y;
+        }
+    }
     LinkedList<String> list=new LinkedList<String>();
     //algorithm
     @Test
     public void algorithm() throws Exception{
-        int[] x={2,234,231,1,23,576,8,9,23,8,45,23,32,3,4,5,1,7,2,4};
-        int aas=10;
+        List<cla> list=new ArrayList<>();
+        list.add(new cla(1,2));
+        list.add(new cla(1,3));
+        list.add(new cla(1,4));
+        list.add(new cla(2,2));
+        list.add(new cla(3,2));
+        list.add(new cla(4,2));
+
+        //去重
+        List<cla> v=list.stream().collect(
+                collectingAndThen(
+                        toCollection(()-> new TreeSet<>(Comparator.comparing(cla::getA))),
+                        ArrayList::new
+                )
+        );
+        //修改元素
+        list.stream().forEach(val->{
+            val.setB(5);
+        });
+        //过滤
+        List<cla> v2=new LinkedList<cla>();
+        list.stream().filter(val->{
+            if(val.getA()!=1)return true;
+            return false;
+        }).forEach(vv->{
+            v2.add(vv);
+        });
+        int xx=10;
     }
     String[] ss=null;
     public boolean isValidSerialization(String preorder) {
