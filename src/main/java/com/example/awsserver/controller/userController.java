@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 import sun.awt.image.ImageWatched;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.*;
 import java.util.List;
@@ -73,10 +76,73 @@ public class userController {
             b=y;
         }
     }
+
+    String ppp="D:\\nzz\\隔离\\tmp\\muma";
+    @Test
+    public void test11(){
+        dbFile(ppp);
+    }
+    public void dbFile(String path){
+        File file = new File(path);
+        if (file.exists()) {
+            File[] files = file.listFiles();
+            if (null == files || files.length == 0) {
+                System.out.println("文件夹是空的!");
+                return;
+            } else {
+                for (File file2 : files) {
+                    if (file2.isDirectory()) {
+                        dbFile(file2.getAbsolutePath());
+                    } else {
+                        //文件
+                        String path2=file2.getAbsolutePath().substring(ppp.length());
+                        if(path2.endsWith(".html") || path2.endsWith(".htm")){
+                            ttt(file2.getAbsolutePath(),ppp+"2"+path2);
+                        }
+                    }
+                }
+            }
+        } else {
+            System.out.println("文件不存在!");
+        }
+    }
+
+    public void ttt(String fi1,String fi2) {
+        try {
+            System.out.println(fi1);
+            System.out.println(fi2);
+            //String fi1="D:\\nzz\\隔离\\tmp\\muma\\webapps\\home\\hollycpm_sj\\HollyV8_SJ0626\\hollybeacon\\business\\demo\\code.html";
+            //String fi2="D:\\nzz\\隔离\\tmp\\muma2\\webapps\\home\\hollycpm_sj\\HollyV8_SJ0626\\hollybeacon\\business\\demo\\code.html";
+            File ff=new File(fi2);
+            FileInputStream f = new FileInputStream(fi1);
+            FileOutputStream out=new FileOutputStream(fi2);
+            Scanner sc=new Scanner(f,"utf-8");
+            boolean flag=true;
+            if (!ff.exists()) {
+                ff.createNewFile();
+            }
+            while(sc.hasNext()){
+                String s=sc.nextLine()+"\n";
+                if(s.indexOf("DropFileName = \"svchost.exe\"")>=0){
+                    flag=false;
+                }else if(!flag && s.indexOf("-->")>=0){
+                    flag=true;
+                }
+                if(flag){
+                    byte[] bytesArray = s.getBytes();
+                    out.write(bytesArray);
+                    out.flush();
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
     LinkedList<String> list=new LinkedList<String>();
     //algorithm
     @Test
     public void algorithm() throws Exception{
+        List<Map> t= userm.test("bb");
         List<cla> list=new ArrayList<>();
         list.add(new cla(1,2));
         list.add(new cla(1,3));

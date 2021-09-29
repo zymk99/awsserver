@@ -6,10 +6,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 import sun.misc.Contended;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper
 @Component
 public interface userMapper {
     public userDao userLogin(String name, String passwd);
+
+    @MapKey("uid")
+    public List<Map> test(String s);
 }

@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/photo")
 public class pictureController {
-    private String dicPath="";
+    private String dicPath="D:\\新建文件夹\\p";
     private static String[] allPicDic=null;
     private String[] currFiles=null;
     private int currIndex=-1;

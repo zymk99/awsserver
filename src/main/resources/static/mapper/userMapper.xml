@@ -4,4 +4,9 @@
     <select id="userLogin" parameterType="string" resultType="com.example.awsserver.dao.userDao">
         select * from usertable where name=#{name} and passwd=#{passwd} and isvalid is null  limit 1
     </select>
+
+    <select id="test" parameterType="string" resultType="java.util.Map">
+        select * from user where name like concat(#{ss},'%')
+    </select>
+
 </mapper>
